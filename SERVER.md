@@ -1,12 +1,13 @@
 # PrimeNG 16.4.2 Docker Server Configuration
 
-This Dockerfile configures a container to run the PrimeNG v16.4.2 documentation server with server-side rendering (SSR).
+This Dockerfile configures a container to run the PrimeNG v16.4.2 documentation server with server-side rendering (SSR). The configuration supports both ARM64 (Apple Silicon) and AMD64 (Intel/AMD) architectures.
 
 ## Container Configuration
 - Base image: `node:18-alpine`
 - Serves PrimeNG documentation and demos
 - Version: 16.4.2
 - Port: 4000
+- Architectures: ARM64, AMD64
 
 ## Build & Run Process
 1. Uses Node.js 18 with Alpine Linux for minimal image size
@@ -15,6 +16,8 @@ This Dockerfile configures a container to run the PrimeNG v16.4.2 documentation 
 4. Runs server via `npm run serve:ssr`
 
 ## Quick Start
+
+### Single Architecture Build
 1. Build the Docker image:
    ```bash
    docker build -t primeng-docs .
@@ -23,6 +26,17 @@ This Dockerfile configures a container to run the PrimeNG v16.4.2 documentation 
 2. Run the container:
    ```bash
    docker run -p 4000:4000 primeng-docs
+   ```
+
+### Multi-Architecture Build
+1. Create and use a new builder with multi-architecture support:
+   ```bash
+   docker buildx create --use
+   ```
+
+2. Build and push for multiple architectures:
+   ```bash
+   docker buildx build --platform linux/amd64,linux/arm64 -t YOUR_USERNAME/primeng-docs:16.4.2 --push .
    ```
 
 3. Access the documentation:
@@ -35,16 +49,26 @@ This Dockerfile configures a container to run the PrimeNG v16.4.2 documentation 
    docker login
    ```
 
-2. Tag the image with your Docker Hub username:
+2. Build and push multi-architecture image:
    ```bash
-   docker tag primeng-docs YOUR_USERNAME/primeng-docs:16.4.2
+   docker buildx build --platform linux/amd64,linux/arm64 \
+     -t YOUR_USERNAME/primeng-docs:16.4.2 \
+     --push .
    ```
 
-3. Push to Docker Hub:
-   ```bash
-   docker push YOUR_USERNAME/primeng-docs:16.4.2
-   ```
+After pushing, your image will be available at `docker.io/YOUR_USERNAME/primeng-docs:16.4.2` and will work on both ARM64 and AMD64 architectures.
 
-After pushing, your image will be available at `docker.io/YOUR_USERNAME/primeng-docs:16.4.2`
+## Architecture-Specific Builds
+If you need to build for a specific architecture:
+
+- For ARM64 (Apple Silicon):
+  ```bash
+  docker build --platform linux/arm64 -t primeng-docs:arm64 .
+  ```
+
+- For AMD64 (Intel/AMD):
+  ```bash
+  docker build --platform linux/amd64 -t primeng-docs:amd64 .
+  ```
 
 

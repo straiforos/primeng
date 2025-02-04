@@ -1,8 +1,11 @@
-# Use Node 18 as base image
-FROM node:18-alpine
+# Use Node 18 as base image with multi-platform support
+FROM --platform=$BUILDPLATFORM node:18-alpine
 
 # Set working directory
 WORKDIR /app
+
+# Install Python and build dependencies
+RUN apk add --no-cache python3 make g++ gcc py3-pip py3-setuptools
 
 # Copy package files
 COPY package*.json ./
