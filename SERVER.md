@@ -29,4 +29,22 @@ This Dockerfile configures a container to run the PrimeNG v16.4.2 documentation 
    - Open your browser and navigate to `http://localhost:4000`
    - The SSR-enabled PrimeNG documentation will be available
 
+## Publishing to Docker Hub
+1. Login to Docker Hub:
+   ```bash
+   docker login
+   ```
+
+2. Tag the image with your Docker Hub username:
+   ```bash
+   docker tag primeng-docs YOUR_USERNAME/primeng-docs:16.4.2
+   ```
+
+3. Push to Docker Hub:
+   ```bash
+   docker push YOUR_USERNAME/primeng-docs:16.4.2
+   ```
+
+After pushing, your image will be available at `docker.io/YOUR_USERNAME/primeng-docs:16.4.2`
+
 
